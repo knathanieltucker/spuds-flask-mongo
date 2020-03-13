@@ -1,16 +1,16 @@
+import os
 from flask import Flask, jsonify, request
 from flask_pymongo import PyMongo
 from flask_dotenv import DotEnv
 
 app = Flask(__name__)
 # We try to read in env vars if they exist
-try:
-    env = DotEnv()
-    env.init_app(app)
-except:
-    app.config.from_envvar('MONGO_URI')
+env = DotEnv()
+env.init_app(app, verbose_mode=False)
 
-mongo = PyMongo(app, retryWrites=False)
+MONGO_URI = os.environ.get("MONGO_URI")
+
+mongo = PyMongo(app, uri=MONGO_URI, retryWrites=False)
 
 @app.route('/test', methods=['GET'])
 def get_all_frameworks():
