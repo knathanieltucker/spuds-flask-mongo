@@ -3,8 +3,12 @@ from flask_pymongo import PyMongo
 from flask_dotenv import DotEnv
 
 app = Flask(__name__)
-env = DotEnv()
-env.init_app(app)
+# We try to read in env vars if they exist
+try:
+    env = DotEnv()
+    env.init_app(app)
+except:
+    app.config.from_envvar('MONGO_URI')
 
 mongo = PyMongo(app, retryWrites=False)
 
